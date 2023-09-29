@@ -17,10 +17,10 @@ function App() {
           <SideBar toggle={toggleSidebar} isOpen={sidebarIsOpen} />
           <Content toggleSidebar={toggleSidebar} sidebarIsOpen={sidebarIsOpen} />
         </div>
-        <Routes>
+        {/* <Routes>
           <Route exact path="/post" element={<Post />} />
           <Route exact path="/user" element={<User />} />
-        </Routes>
+        </Routes> */}
       </Fragment>
     </Router>
   );
