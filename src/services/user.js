@@ -25,7 +25,7 @@ const postUserApi = (payload) => {
 };
 
 const putUserApi = (id, payload) => {
-  return axios.post(`${process.env.REACT_APP_API}user/${id}`, payload, {
+  return axios.put(`${process.env.REACT_APP_API}user/${id}`, payload, {
     headers: {
       "app-id": "62996cb2689bf0731cb00285",
     },
@@ -33,7 +33,7 @@ const putUserApi = (id, payload) => {
 };
 
 const deleteUserApi = (id) => {
-  return axios.post(`${process.env.REACT_APP_API}user/${id}`, {
+  return axios.delete(`${process.env.REACT_APP_API}user/${id}`, {
     headers: {
       "app-id": "62996cb2689bf0731cb00285",
     },
