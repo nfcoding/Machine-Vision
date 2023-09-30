@@ -33,11 +33,11 @@ const User = () => {
   const columns = [
     {
       name: "Name",
-      selector: (row) => row.firstName + " " + row.lastName
+      selector: (row) => row.firstName + " " + row.lastName,
     },
     {
       name: "Picture",
-      selector: (row) => (row.picture ? <img src={row.picture} alt='profil' style={{ width: '3rem', height: '3rem' }} onClick={() => handleShowPicture(row.picture)} /> : "-"),
+      selector: (row) => (row.picture ? <img src={row.picture} alt="profil" style={{ width: "3rem", height: "3rem" }} onClick={() => handleShowPicture(row.picture)} /> : "-"),
     },
     {
       name: "Action",
@@ -59,7 +59,7 @@ const User = () => {
     getUsersApi(page - 1, limit)
       .then((res) => {
         setData(res.data.data);
-        setTotalRows(res.data.total)
+        setTotalRows(res.data.total);
       })
       .catch((e) => {
         console.log(e);
@@ -80,42 +80,42 @@ const User = () => {
   const toggleModalPreview = () => setModalPreviewPicture(!modalPreviewPicture);
 
   const handleShowPicture = (url) => {
-    setModalPreviewPicture(true)
-    setPreviewPictureUrl(url)
-  }
+    setModalPreviewPicture(true);
+    setPreviewPictureUrl(url);
+  };
 
   const setErrorMessage = (e) => {
-    let error = e?.response?.data?.data
+    let error = e?.response?.data?.data;
     if (error?.hasOwnProperty("title")) {
-      setErrorTitle(error.title)
+      setErrorTitle(error.title);
     }
     if (error?.hasOwnProperty("firstName")) {
-      setErrorFirstName(error.firstName)
+      setErrorFirstName(error.firstName);
     }
     if (error?.hasOwnProperty("lastName")) {
-      setErrorLastName(error.lastName)
+      setErrorLastName(error.lastName);
     }
     if (error?.hasOwnProperty("email")) {
-      setErrorEmail(error.email)
+      setErrorEmail(error.email);
     }
-  }
+  };
 
   const resetErrorMessage = () => {
-    setErrorTitle(false)
-    setErrorFirstName(false)
-    setErrorLastName(false)
-    setErrorEmail(false)
-  }
+    setErrorTitle(false);
+    setErrorFirstName(false);
+    setErrorLastName(false);
+    setErrorEmail(false);
+  };
 
   const onClosedModal = () => {
-    setAction('create')
+    setAction("create");
     setId(null);
-    setTitle("")
-    setFirstName("")
-    setLastName("")
-    setEmail("")
-    setPicture("")
-    resetErrorMessage()
+    setTitle("");
+    setFirstName("");
+    setLastName("");
+    setEmail("");
+    setPicture("");
+    resetErrorMessage();
   };
 
   const handleChange = (e, field) => {
@@ -134,8 +134,8 @@ const User = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setLoading(true)
-    resetErrorMessage()
+    setLoading(true);
+    resetErrorMessage();
     const payload = {
       title: title.value,
       firstName,
@@ -148,63 +148,61 @@ const User = () => {
       postUserApi(payload)
         .then((res) => {
           Swal.fire({
-            position: 'top-end',
-            icon: 'success',
-            title: 'Data created !',
+            position: "top-end",
+            icon: "success",
+            title: "Data created !",
             showConfirmButton: false,
             timer: 2000,
             showCloseButton: true,
-          })
+          });
           setModal(false);
-          setLoading(false)
+          setLoading(false);
 
           getData();
         })
         .catch((e) => {
           Swal.fire({
-            position: 'top-end',
-            icon: 'error',
-            title: 'Something Wrong !',
+            position: "top-end",
+            icon: "error",
+            title: "Something Wrong !",
             showConfirmButton: false,
             timer: 2000,
             showCloseButton: true,
-          })
-          setLoading(false)
+          });
+          setLoading(false);
 
-          setErrorMessage(e)
+          setErrorMessage(e);
 
-          console.log(e)
+          console.log(e);
         });
     } else {
       putUserApi(id, payload)
         .then((res) => {
           Swal.fire({
-            position: 'top-end',
-            icon: 'success',
-            title: 'Data updated !',
+            position: "top-end",
+            icon: "success",
+            title: "Data updated !",
             showConfirmButton: false,
             timer: 2000,
             showCloseButton: true,
-          })
+          });
           setModal(false);
-          setLoading(false)
+          setLoading(false);
           getData();
         })
         .catch((e) => {
           Swal.fire({
-            position: 'top-end',
-            icon: 'error',
-            title: 'Something Wrong !',
+            position: "top-end",
+            icon: "error",
+            title: "Something Wrong !",
             showConfirmButton: false,
             timer: 2000,
             showCloseButton: true,
-          })
-          setLoading(false)
-          setErrorMessage(e)
+          });
+          setLoading(false);
+          setErrorMessage(e);
         });
-
     }
-
   };
 
   const handlePageChange = (page) => {
@@ -217,12 +215,12 @@ const User = () => {
 
   const handleEdit = async (id) => {
     setAction("update");
-    setId(id)
+    setId(id);
     getUserApi(id)
       .then((res) => {
-        const data = res.data
-        const selectedTitle = titleOption.find((item) => item.value === data.title)
-        setTitle(selectedTitle)
+        const data = res.data;
+        const selectedTitle = titleOption.find((item) => item.value === data.title);
+        setTitle(selectedTitle);
         setFirstName(data.firstName);
         setLastName(data.lastName);
         setPicture(data.picture);
@@ -236,7 +234,7 @@ const User = () => {
           text: e,
           timer: 2000,
           showCloseButton: true,
-          position: 'top-end'
+          position: "top-end",
         });
       });
   };
@@ -258,7 +256,7 @@ const User = () => {
               icon: "success",
               title: "Success",
               text: "Data Deleted !",
-              position: 'top-end',
+              position: "top-end",
               timer: 2000,
               showCloseButton: true,
             });
@@ -266,20 +264,20 @@ const User = () => {
           })
           .catch((e) => {
             Swal.fire({
-              position: 'top-end',
-              icon: 'error',
-              title: 'Something Wrong !',
+              position: "top-end",
+              icon: "error",
+              title: "Something Wrong !",
               showConfirmButton: false,
               timer: 2000,
               showCloseButton: true,
-            })
-          })
+            });
+          });
       }
     });
   };
 
   return (
-    <Container>
+    <Container className="mt-5">
       <Row>
         <Col>
           <Card className="shadow">
@@ -292,16 +290,7 @@ const User = () => {
               </Button>
               <Row>
                 <Col>
-                  <DataTable
-                    columns={columns}
-                    data={data}
-                    pagination
-                    paginationServer
-                    paginationTotalRows={totalRows}
-                    paginationDefaultPage={page}
-                    onChangeRowsPerPage={handlePerRowsChange}
-                    onChangePage={handlePageChange}
-                  />
+                  <DataTable columns={columns} data={data} pagination paginationServer paginationTotalRows={totalRows} paginationDefaultPage={page} onChangeRowsPerPage={handlePerRowsChange} onChangePage={handlePageChange} />
                 </Col>
               </Row>
             </CardBody>
@@ -317,30 +306,22 @@ const User = () => {
             <FormGroup>
               <Label for="title">Title</Label>
               <Select onChange={(e) => handleChange(e, "title")} options={titleOption} placeholder="Pilih..." value={title} />
-              {errorTitle && <FormText color="danger">
-                {errorTitle}
-              </FormText>}
+              {errorTitle && <FormText color="danger">{errorTitle}</FormText>}
             </FormGroup>
             <FormGroup>
               <Label for="firstname">Firstname</Label>
               <Input id="firstname" name="firstname" placeholder="Input Firstname..." type="text" onChange={(e) => handleChange(e, "firstname")} value={firstName} />
-              {errorFirstName && <FormText color="danger">
-                {errorFirstName}
-              </FormText>}
+              {errorFirstName && <FormText color="danger">{errorFirstName}</FormText>}
             </FormGroup>
             <FormGroup>
               <Label for="lastname">Lastname</Label>
               <Input id="lastname" name="lastname" placeholder="Input lastname..." type="text" onChange={(e) => handleChange(e, "lastname")} value={lastName} />
-              {errorLastName && <FormText color="danger">
-                {errorLastName}
-              </FormText>}
+              {errorLastName && <FormText color="danger">{errorLastName}</FormText>}
             </FormGroup>
             <FormGroup>
               <Label for="email">Email</Label>
               <Input id="email" name="email" placeholder="Input email..." type="email" onChange={(e) => handleChange(e, "email")} value={email} />
-              {errorEmail && <FormText color="danger">
-                {errorEmail}
-              </FormText>}
+              {errorEmail && <FormText color="danger">{errorEmail}</FormText>}
             </FormGroup>
             <FormGroup>
               <Label for="picture">Picture</Label>
@@ -364,7 +345,7 @@ const User = () => {
         <img src={previewPictureUrl} alt="priview" />
       </Modal>
       {/* END FORM USER */}
-    </Container >
+    </Container>
   );
 };
 
