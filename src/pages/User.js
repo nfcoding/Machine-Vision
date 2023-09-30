@@ -1,24 +1,30 @@
 import React, { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
-import { Button, Card, CardBody, CardHeader, Form, Col, Container, FormGroup, Input, Label, Modal, ModalBody, ModalFooter, ModalHeader, Row, Alert, FormText } from "reactstrap";
+import { Button, Card, CardBody, CardHeader, Form, Col, Container, FormGroup, Input, Label, Modal, ModalBody, ModalFooter, ModalHeader, Row, FormText } from "reactstrap";
 import { deleteUserApi, getUserApi, getUsersApi, postUserApi, putUserApi } from "../services/user";
 import Select from "react-select";
 import Swal from "sweetalert2";
 
 const User = () => {
   const [modal, setModal] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
   const [totalRows, setTotalRows] = useState(0);
   const [title, setTitle] = useState("");
+  const [errorTitle, setErrorTitle] = useState(false);
   const [firstName, setFirstName] = useState("");
+  const [errorFirstName, setErrorFirstName] = useState(false);
   const [lastName, setLastName] = useState("");
+  const [errorLastName, setErrorLastName] = useState(false);
   const [email, setEmail] = useState("");
   const [errorEmail, setErrorEmail] = useState(false);
   const [picture, setPicture] = useState("");
   const [action, setAction] = useState("create");
   const [id, setId] = useState("");
+  const [modalPreviewPicture, setModalPreviewPicture] = useState(false);
+  const [previewPictureUrl, setPreviewPictureUrl] = useState("");
   const titleOption = [
     { label: "Mr", value: "mr" },
     { label: "Mrs", value: "mrs" },
@@ -27,11 +33,11 @@ const User = () => {
   const columns = [
     {
       name: "Name",
-      selector: (row) => (row.firstName ? row.firstName : "-"),
+      selector: (row) => row.firstName + " " + row.lastName
     },
     {
       name: "Picture",
-      selector: (row) => (row.picture ? <img src={row.picture} style={{ width: '3rem', height: '3rem' }} /> : "-"),
+      selector: (row) => (row.picture ? <img src={row.picture} alt='profil' style={{ width: '3rem', height: '3rem' }} onClick={() => handleShowPicture(row.picture)} /> : "-"),
     },
     {
       name: "Action",
@@ -62,6 +68,7 @@ const User = () => {
 
   useEffect(() => {
     getData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, limit]);
 
   const handleCreateUser = () => {
@@ -70,9 +77,45 @@ const User = () => {
   };
 
   const toggle = () => setModal(!modal);
+  const toggleModalPreview = () => setModalPreviewPicture(!modalPreviewPicture);
+
+  const handleShowPicture = (url) => {
+    setModalPreviewPicture(true)
+    setPreviewPictureUrl(url)
+  }
+
+  const setErrorMessage = (e) => {
+    let error = e?.response?.data?.data
+    if (error?.hasOwnProperty("title")) {
+      setErrorTitle(error.title)
+    }
+    if (error?.hasOwnProperty("firstName")) {
+      setErrorFirstName(error.firstName)
+    }
+    if (error?.hasOwnProperty("lastName")) {
+      setErrorLastName(error.lastName)
+    }
+    if (error?.hasOwnProperty("email")) {
+      setErrorEmail(error.email)
+    }
+  }
+
+  const resetErrorMessage = () => {
+    setErrorTitle(false)
+    setErrorFirstName(false)
+    setErrorLastName(false)
+    setErrorEmail(false)
+  }
 
   const onClosedModal = () => {
-    // setId(null);
+    setAction('create')
+    setId(null);
+    setTitle("")
+    setFirstName("")
+    setLastName("")
+    setEmail("")
+    setPicture("")
+    resetErrorMessage()
   };
 
   const handleChange = (e, field) => {
@@ -89,77 +132,79 @@ const User = () => {
     }
   };
 
-  const validation = () => {
-    if (email === "") {
-      setErrorEmail(true)
-      return false
-    } else {
-      setErrorEmail(false)
-      return true
-    }
-  }
-
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (validation()) {
-      const payload = {
-        title: title !== "" ? title.value : "",
-        firstName,
-        lastName,
-        email,
-        picture,
-      };
+    setLoading(true)
+    resetErrorMessage()
+    const payload = {
+      title: title.value,
+      firstName,
+      lastName,
+      email,
+      picture,
+    };
 
-      if (action === "create") {
-        postUserApi(payload)
-          .then((res) => {
-            Swal.fire({
-              position: 'top-end',
-              icon: 'success',
-              title: 'Data created !',
-              showConfirmButton: false,
-              timer: 2000,
-              showCloseButton: true,
-            })
-            setModal(false);
-            getData();
+    if (action === "create") {
+      postUserApi(payload)
+        .then((res) => {
+          Swal.fire({
+            position: 'top-end',
+            icon: 'success',
+            title: 'Data created !',
+            showConfirmButton: false,
+            timer: 2000,
+            showCloseButton: true,
           })
-          .catch((e) => {
-            Swal.fire({
-              position: 'top-end',
-              icon: 'error',
-              title: 'Something Wrong !',
-              showConfirmButton: false,
-              timer: 2000,
-              showCloseButton: true,
-            })
-          });
-      } else {
-        putUserApi(id, payload)
-          .then((res) => {
-            Swal.fire({
-              position: 'top-end',
-              icon: 'success',
-              title: 'Data updated !',
-              showConfirmButton: false,
-              timer: 2000,
-              showCloseButton: true,
-            })
-            setModal(false);
-            getData();
+          setModal(false);
+          setLoading(false)
+
+          getData();
+        })
+        .catch((e) => {
+          Swal.fire({
+            position: 'top-end',
+            icon: 'error',
+            title: 'Something Wrong !',
+            showConfirmButton: false,
+            timer: 2000,
+            showCloseButton: true,
           })
-          .catch((e) => {
-            Swal.fire({
-              position: 'top-end',
-              icon: 'error',
-              title: 'Something Wrong !',
-              showConfirmButton: false,
-              timer: 2000,
-              showCloseButton: true,
-            })
-          });
-      }
+          setLoading(false)
+
+          setErrorMessage(e)
+
+          console.log(e)
+        });
+    } else {
+      putUserApi(id, payload)
+        .then((res) => {
+          Swal.fire({
+            position: 'top-end',
+            icon: 'success',
+            title: 'Data updated !',
+            showConfirmButton: false,
+            timer: 2000,
+            showCloseButton: true,
+          })
+          setModal(false);
+          setLoading(false)
+          getData();
+        })
+        .catch((e) => {
+          Swal.fire({
+            position: 'top-end',
+            icon: 'error',
+            title: 'Something Wrong !',
+            showConfirmButton: false,
+            timer: 2000,
+            showCloseButton: true,
+          })
+          setLoading(false)
+          setErrorMessage(e)
+        });
+
     }
+
   };
 
   const handlePageChange = (page) => {
@@ -169,13 +214,13 @@ const User = () => {
   const handlePerRowsChange = async (limit, page) => {
     setLimit(limit);
   };
+
   const handleEdit = async (id) => {
     setAction("update");
     setId(id)
     getUserApi(id)
       .then((res) => {
         const data = res.data
-        console.log(res)
         const selectedTitle = titleOption.find((item) => item.value === data.title)
         setTitle(selectedTitle)
         setFirstName(data.firstName);
@@ -195,15 +240,16 @@ const User = () => {
         });
       });
   };
+
   const handleDelete = (id) => {
     Swal.fire({
       title: "Delete Data?",
-      text: "Data cannot be restored!",
+      text: "Are you sure want to delete this data?",
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
-      confirmButtonText: "Delete!",
+      confirmButtonText: "Yes",
     }).then((result) => {
       if (result.isConfirmed) {
         deleteUserApi(id)
@@ -271,20 +317,29 @@ const User = () => {
             <FormGroup>
               <Label for="title">Title</Label>
               <Select onChange={(e) => handleChange(e, "title")} options={titleOption} placeholder="Pilih..." value={title} />
+              {errorTitle && <FormText color="danger">
+                {errorTitle}
+              </FormText>}
             </FormGroup>
             <FormGroup>
               <Label for="firstname">Firstname</Label>
               <Input id="firstname" name="firstname" placeholder="Input Firstname..." type="text" onChange={(e) => handleChange(e, "firstname")} value={firstName} />
+              {errorFirstName && <FormText color="danger">
+                {errorFirstName}
+              </FormText>}
             </FormGroup>
             <FormGroup>
               <Label for="lastname">Lastname</Label>
               <Input id="lastname" name="lastname" placeholder="Input lastname..." type="text" onChange={(e) => handleChange(e, "lastname")} value={lastName} />
+              {errorLastName && <FormText color="danger">
+                {errorLastName}
+              </FormText>}
             </FormGroup>
             <FormGroup>
               <Label for="email">Email</Label>
               <Input id="email" name="email" placeholder="Input email..." type="email" onChange={(e) => handleChange(e, "email")} value={email} />
               {errorEmail && <FormText color="danger">
-                Email Required !
+                {errorEmail}
               </FormText>}
             </FormGroup>
             <FormGroup>
@@ -296,11 +351,17 @@ const User = () => {
             <Button color="secondary" onClick={toggle}>
               Close
             </Button>
-            <Button color="primary" type="submit">
+            <Button color="primary" type="submit" disabled={loading}>
               Submit
             </Button>
           </ModalFooter>
         </Form>
+      </Modal>
+      {/* END FORM USER */}
+      {/* BEGIN FORM PREVIEW PICTURE */}
+      <Modal isOpen={modalPreviewPicture}>
+        <ModalHeader toggle={toggleModalPreview}></ModalHeader>
+        <img src={previewPictureUrl} alt="priview" />
       </Modal>
       {/* END FORM USER */}
     </Container >
