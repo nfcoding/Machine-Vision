@@ -18,7 +18,7 @@ const SideBar = ({ isOpen, toggle }) => (
     <div className="side-menu">
       <Nav vertical className="list-unstyled pb-3">
         <NavItem>
-          <NavLink tag={Link} to={"/user"} id="sidebar-link">
+          <NavLink tag={Link} to={"/"} id="sidebar-link">
             <FontAwesomeIcon icon={faUser} className="me-2" />
             User
           </NavLink>
