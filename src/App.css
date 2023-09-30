@@ -19,13 +19,10 @@ a:focus {
   transition: all 0.3s;
 }
 
-/* ---------------------------------------------------
-      SIDEBAR STYLE
-  ----------------------------------------------------- */
 .sidebar {
   min-width: 250px;
   max-width: 250px;
-  background: #0cbfe2;
+  background: #1a68be;
   color: #fff;
   margin-left: -250px;
   transition: all 0.5s;
@@ -37,7 +34,7 @@ a:focus {
 }
 
 .sidebar-header {
-  background: #0da2c0;
+  background: #46484b;
 }
 
 .sidebar-header h3 {
@@ -56,7 +53,7 @@ a:focus {
 
 .nav-item:hover {
   color: #7386d5;
-  background: #15414a;
+  background: #687787;
 }
 
 .items-menu {
@@ -97,9 +94,6 @@ li a.dropdown-toggle::after {
   background: #3a4c99;
 }
 
-/* ---------------------------------------------------
-      CONTENT STYLE
-  ----------------------------------------------------- */
 .content {
   padding: 20px;
   margin-left: 0;
@@ -132,10 +126,6 @@ li a.dropdown-toggle::after {
     left: 68%;
   }
 }
-
-/* ---------------------------------------------------
-      MY STYLE
-  ----------------------------------------------------- */
 
 #sidebar-link {
   text-decoration: none;
