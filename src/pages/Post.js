@@ -85,7 +85,6 @@ const Post = () => {
   const getData = async () => {
     getPostsApi(page - 1, limit)
       .then((res) => {
-        console.log(res);
         setData(res.data.data);
         setTotalRows(res.data.total);
       })
@@ -173,7 +172,7 @@ const Post = () => {
       setErrorOwner(false);
     }
 
-    if (errorText !== false || image === "" || tags.length === 0 || owner === "") {
+    if (text === "" || text.length < 6 || image === "" || tags.length === 0 || owner === "") {
       setLoading(false);
       return false;
     } else {
@@ -268,11 +267,8 @@ const Post = () => {
     getPostApi(id)
       .then((res) => {
         const data = res.data;
-        if (ownerOption) {
-          const selectedOwner = ownerOption.find((item) => item.value === data.owner.id);
-          setOwner(selectedOwner);
-        }
-
+        const selectedOwner = ownerOption.find((item) => item.value === data.owner.id);
+        setOwner(selectedOwner);
         setText(data.text);
         setImage(data.image);
         setLikes(data.likes);
@@ -376,12 +372,15 @@ const Post = () => {
             </FormGroup>
             <FormGroup>
               <Label for="likes">Likes</Label>
-              <Input id="likes" name="likes" placeholder="Input likes..." type="text" onChange={(e) => handleChange(e, "likes")} value={likes} />
+              <Input id="likes" name="likes" placeholder="Input likes..." type="number" onChange={(e) => handleChange(e, "likes")} value={likes} />
             </FormGroup>
             <FormGroup>
               <Label for="tags">Tags</Label>
-              {/* <Input id="tags" name="tags" placeholder="Input tags..." type="text" onChange={(e) => handleChange(e, "tags")} value={tags} /> */}
               <TagsInput value={tags.length > 0 ? tags : []} onChange={(e) => handleChangeTags(e)} />
+              <FormText color="secondary">
+                <small>Press enter to add tags</small>
+              </FormText>
+              <br />
               {errorTags && <FormText color="danger">Tags required!</FormText>}
             </FormGroup>
           </ModalBody>
