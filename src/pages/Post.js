@@ -352,7 +352,7 @@ const Post = () => {
 
       {/* BEGIN FORM USER */}
       <Modal isOpen={modal} toggle={toggle} onClosed={onClosedModal}>
-        <ModalHeader toggle={toggle}>User Form</ModalHeader>
+        <ModalHeader toggle={toggle}>{action === "create" ? "Create Post" : "Edit Post"}</ModalHeader>
         <Form onSubmit={(e) => handleSubmit(e)}>
           <ModalBody>
             <FormGroup>
