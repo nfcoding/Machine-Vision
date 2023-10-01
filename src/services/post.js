@@ -16,6 +16,14 @@ const getPostApi = (id) => {
   });
 };
 
+const getPostByTagApi = (page, limit, keyword) => {
+  return axios.get(`${process.env.REACT_APP_API}tag/${keyword}/post?page=${page}&limit=${limit}&created=1`, {
+    headers: {
+      "app-id": "62996cb2689bf0731cb00285",
+    },
+  });
+};
+
 const postPostApi = (payload) => {
   return axios.post(`${process.env.REACT_APP_API}post/create`, payload, {
     headers: {
@@ -40,4 +48,4 @@ const deletePostApi = (id) => {
   });
 };
 
-export { getPostsApi, getPostApi, postPostApi, putPostApi, deletePostApi };
+export { getPostsApi, getPostApi, postPostApi, putPostApi, deletePostApi, getPostByTagApi };
