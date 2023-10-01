@@ -14,9 +14,6 @@ const SideBar = ({ isOpen, toggle }) => {
         <span color="info" onClick={toggle} style={{ color: "#fff" }}>
           &times;
         </span>
-        {/* <h3 className="d-flex justify-content-center">
-          <FontAwesomeIcon icon={faHome} />
-        </h3> */}
       </div>
       <div className="side-menu">
         <Nav vertical className="list-unstyled pb-3">
