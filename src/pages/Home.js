@@ -67,8 +67,8 @@ const Home = () => {
       <div className="mt-4">
         <Row>
           {data?.length > 0 ? (
-            data.map((item) => (
-              <Col md={3} className="mb-2">
+            data.map((item, index) => (
+              <Col md={3} className="mb-2" key={index + 1}>
                 <Card>
                   <img alt="Card" src={item?.image ?? "/public/no image.png"} height="250rem" />
                   <CardBody>

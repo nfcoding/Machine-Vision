@@ -8,6 +8,7 @@ import Swal from "sweetalert2";
 const User = () => {
   const [modal, setModal] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [loadingData, setLoadingData] = useState(false);
   const [data, setData] = useState([]);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
@@ -56,12 +57,15 @@ const User = () => {
 
   // LOAD USER
   const getData = async () => {
+    setLoadingData(true);
     getUsersApi(page - 1, limit)
       .then((res) => {
+        setLoadingData(false);
         setData(res.data.data);
         setTotalRows(res.data.total);
       })
       .catch((e) => {
+        setLoadingData(false);
         console.log(e);
       });
   };
@@ -290,7 +294,17 @@ const User = () => {
               </Button>
               <Row>
                 <Col>
-                  <DataTable columns={columns} data={data} pagination paginationServer paginationTotalRows={totalRows} paginationDefaultPage={page} onChangeRowsPerPage={handlePerRowsChange} onChangePage={handlePageChange} />
+                  <DataTable
+                    columns={columns}
+                    progressPending={loadingData}
+                    data={data}
+                    pagination
+                    paginationServer
+                    paginationTotalRows={totalRows}
+                    paginationDefaultPage={page}
+                    onChangeRowsPerPage={handlePerRowsChange}
+                    onChangePage={handlePageChange}
+                  />
                 </Col>
               </Row>
             </CardBody>

@@ -12,6 +12,7 @@ import "react-tagsinput/react-tagsinput.css";
 const Post = () => {
   const [modal, setModal] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [loadingData, setLoadingData] = useState(false);
   const [data, setData] = useState([]);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
@@ -83,13 +84,16 @@ const Post = () => {
 
   // LOAD POST
   const getData = async () => {
+    setLoadingData(true);
     getPostsApi(page - 1, limit)
       .then((res) => {
         setData(res.data.data);
         setTotalRows(res.data.total);
+        setLoadingData(false);
       })
       .catch((e) => {
         console.log(e);
+        setLoadingData(false);
       });
   };
 
@@ -338,7 +342,17 @@ const Post = () => {
               </Button>
               <Row>
                 <Col>
-                  <DataTable columns={columns} data={data} pagination paginationServer paginationTotalRows={totalRows} paginationDefaultPage={page} onChangeRowsPerPage={handlePerRowsChange} onChangePage={handlePageChange} />
+                  <DataTable
+                    columns={columns}
+                    progressPending={loadingData}
+                    data={data}
+                    pagination
+                    paginationServer
+                    paginationTotalRows={totalRows}
+                    paginationDefaultPage={page}
+                    onChangeRowsPerPage={handlePerRowsChange}
+                    onChangePage={handlePageChange}
+                  />
                 </Col>
               </Row>
             </CardBody>
