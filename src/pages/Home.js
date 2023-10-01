@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Card, CardBody, CardText, CardTitle, Col, Container, Input, Pagination, PaginationItem, PaginationLink, Row } from "reactstrap";
+import { Card, CardBody, CardText, Col, Container, Input, Pagination, PaginationItem, PaginationLink, Row } from "reactstrap";
 import { getPostByTagApi, getPostsApi } from "../services/post";
 
 const Home = () => {
   const [data, setData] = useState([]);
-  const [totalRows, setTotalRows] = useState(0);
+  const [, setTotalRows] = useState(0);
   const [page, setPage] = useState(0);
   const [pagesCount, setPagesCount] = useState(0);
   const [limit] = useState(8);
