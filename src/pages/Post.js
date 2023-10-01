@@ -78,10 +78,8 @@ const Post = () => {
   };
 
   useEffect(() => {
-    if (modal === true && action === "create") {
-      getOptionOwner();
-    }
-  }, [modal]);
+    getOptionOwner();
+  }, []);
 
   // LOAD POST
   const getData = async () => {
@@ -270,10 +268,11 @@ const Post = () => {
     getPostApi(id)
       .then((res) => {
         const data = res.data;
-        getOptionOwner().then(() => {
+        if (ownerOption) {
           const selectedOwner = ownerOption.find((item) => item.value === data.owner.id);
           setOwner(selectedOwner);
-        });
+        }
+
         setText(data.text);
         setImage(data.image);
         setLikes(data.likes);
