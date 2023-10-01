@@ -20,22 +20,22 @@ const SideBar = ({ isOpen, toggle }) => {
       </div>
       <div className="side-menu">
         <Nav vertical className="list-unstyled pb-3">
-          <NavItem>
-            <NavLink tag={Link} to={"/"} id="sidebar-link">
+          <NavItem style={{ width: "100%" }}>
+            <NavLink tag={Link} to={"/"} id="sidebar-link" style={location.pathname === "/" ? { backgroundColor: "#46484b" } : {}}>
               <div className="d-flex justify-content-center">
-                <FontAwesomeIcon icon={faHome} size="2x" className="me-2 text-center" style={location.pathname === "/" && { backgroundColor: "#fafaf" }} />
+                <FontAwesomeIcon icon={faHome} size="2x" className="text-center" />
               </div>
             </NavLink>
           </NavItem>
           <NavItem>
-            <NavLink tag={Link} to={"/user"} id="sidebar-link">
-              <FontAwesomeIcon icon={faUser} className="me-2" style={location.pathname === "/user" && { backgroundColor: "#fafaf" }} />
+            <NavLink tag={Link} to={"/user"} id="sidebar-link" style={location.pathname === "/user" ? { backgroundColor: "#46484b" } : {}}>
+              <FontAwesomeIcon icon={faUser} className="me-2" />
               User
             </NavLink>
           </NavItem>
           <NavItem>
-            <NavLink tag={Link} to={"/post"} id="sidebar-link">
-              <FontAwesomeIcon icon={faPaperPlane} className="me-2" style={location.pathname === "/post" && { backgroundColor: "#fafaf" }} />
+            <NavLink tag={Link} to={"/post"} id="sidebar-link" style={location.pathname === "/post" ? { backgroundColor: "#46484b" } : {}}>
+              <FontAwesomeIcon icon={faPaperPlane} className="me-2" />
               Post
             </NavLink>
           </NavItem>
